@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">WeatherApp</string>
+    <string name="Name">Погода рядом</string>
+    <string name="App_name_id"></string>
+    <string name="hint">Введите город</string>
+    <string name="searchButtom">Узнаём погоду?</string>
+    <string name="Arrr">Название где?!</string>
+</resources>
