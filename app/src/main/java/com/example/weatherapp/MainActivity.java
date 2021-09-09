@@ -9,6 +9,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+
 public class MainActivity extends AppCompatActivity {
 
     private EditText user_location;
@@ -28,12 +40,13 @@ public class MainActivity extends AppCompatActivity {
         search_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(user_location.getText().toString().trim().equals("")){ // Проверяю, ввёл ли пользователь название
+                if(user_location.getText().toString().trim().equals("")){ // Проверяю, ввёл ли
+                    // пользователь название
                     //Если не ввёл, то всплывает окно с запросом на ввод названия.
                     Toast.makeText(MainActivity.this, R.string.Arrr, Toast.LENGTH_LONG).show();
                 } else {
                     String city = user_location.getText().toString();
-                    String url = "http://api.openweathermap.org/data/2.5/weather?q=" + city
+                    String url = "https://api.openweathermap.org/data/2.5/weather?q=" + city
                             + "&APPID=" + key + "&units=metric&lang=ru";
 
                     new WeatherData().execute(url);
@@ -46,12 +59,65 @@ public class MainActivity extends AppCompatActivity {
     private class WeatherData extends AsyncTask<String, String, String> {
 
         protected void onPreExecute() {
-
+            super.onPreExecute();
+            search_info.setText("Погодите...");
         }
 
         @Override
         protected String doInBackground(String... strings) {
+
+            HttpURLConnection httpURLConnection = null;
+            BufferedReader reader = null;
+
+            try {
+                URL url = new URL(strings[0]);
+                httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.connect();
+
+                InputStream inputStream = httpURLConnection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+
+                StringBuffer stringBuffer = new StringBuffer();
+                String line = "";
+
+                while((line = reader.readLine()) != null) {
+                    stringBuffer.append(line).append("\n");
+                    return stringBuffer.toString();
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+
+                if(httpURLConnection != null){
+                    httpURLConnection.disconnect();
+                }
+
+                if(reader != null){
+                    try {
+                        reader.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
             return null;
         }
+
+        @Override
+        protected void onPostExecute(String result){
+            super.onPostExecute(result);
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                search_info.setText("Температура: " + jsonObject.getJSONObject("main")
+                        .getDouble("temp"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
     }
 }

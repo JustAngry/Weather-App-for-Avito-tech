@@ -29,12 +29,13 @@
         android:backgroundTint="@color/teal_200"
         android:fontFamily="@font/baloo_paaji"
         android:ems="10"
+        android:autofillHints="@string/hint"
         android:hint="@string/hint"
         android:textColorHint="@color/grey"
         android:textColor="@color/black"
         android:inputType="textPersonName"
         android:textAlignment="center"
-        android:textSize="20dp"/>
+        android:textSize="21sp"/>
 
     <Button
         android:id="@+id/Search_Button"
@@ -42,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/user_location"
         android:layout_marginTop="25dp"
-        android:textSize="18sp"
+        android:textSize="21sp"
         android:layout_marginHorizontal="90dp"
         android:backgroundTint="@color/ColorForButton"
         android:fontFamily="@font/baloo_paaji"
@@ -60,6 +61,6 @@
         android:fontFamily="@font/baloo_paaji"
         android:textAlignment="center"
         android:textSize="20sp"
-        tools:textColor="#FFFFFF" />
+        tools:textColor="@color/white" />
 
 </RelativeLayout>
