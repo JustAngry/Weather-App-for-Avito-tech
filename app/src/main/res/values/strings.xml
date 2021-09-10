@@ -5,4 +5,5 @@
     <string name="hint">Введите город</string>
     <string name="searchButtom">Узнаём погоду?</string>
     <string name="Arrr">Название где?!</string>
+    <string name="Switch">День/Неделя</string>
 </resources>

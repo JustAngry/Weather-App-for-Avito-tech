@@ -1,11 +1,13 @@
 package com.example.weatherapp;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText user_location;
     private Button search_button;
     private TextView search_info;
+    private Switch switchButton;
     String key = "998e60ead5535b18eded3c1ae586b811";
 
     @Override
@@ -36,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
         user_location = findViewById(R.id.user_location);
         search_button = findViewById(R.id.Search_Button);
         search_info = findViewById(R.id.Search_info);
+
+        String forecastUrl = "https://api.openweathermap.org/data/2.5/forecast?q=";
 
         search_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,13 +111,25 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
 
+        @SuppressLint("SetTextI18n")
         @Override
         protected void onPostExecute(String result){
             super.onPostExecute(result);
+
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 search_info.setText("Температура: " + jsonObject.getJSONObject("main")
-                        .getDouble("temp"));
+                        .getDouble("temp") + "\n"
+
+                + "Ощущается как: " + jsonObject.getJSONObject("main")
+                        .getDouble("feels like") + "\n"
+
+                + "Давление: " + jsonObject.getJSONObject("main")
+                        .getInt("pressure") + "\n"
+
+                + "Скорость ветра: " + jsonObject.getJSONObject("wind")
+                        .getDouble("wind"));
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
